@@ -1,0 +1,193 @@
+/* --- 1. กำหนดตัวแปรสี (CSS Variables) --- */
+:root {
+    /* ธีมมืด (Default) */
+    --bg-body: #C47BE4;             /* สีพื้นหลังเว็บ */
+    --bg-calc: #000000;             /* สีตัวเครื่องคิดเลข */
+    --text-color: #ffffff;          /* สีตัวอักษร */
+    --screen-text: #ffffff;         /* สีตัวเลขบนจอ */
+    
+    --btn-num-bg: #333333;          /* สีปุ่มตัวเลข */
+    --btn-num-text: #ffffff;
+    
+    --btn-func-bg: #a5a5a5;         /* สีปุ่ม AC, DEL */
+    --btn-func-text: #000000;
+    
+    --btn-op-bg: #ff9f0a;           /* สีปุ่มเครื่องหมาย */
+    --btn-op-text: #ffffff;
+    
+    --history-bg: rgba(20, 20, 20, 0.95); /* สีพื้นหลังประวัติ */
+}
+
+/* ธีมสว่าง (Light Mode) - จะทำงานเมื่อ body มี class="light-mode" */
+body.light-mode {
+    --bg-body: #C47BE4;
+    --bg-calc: #ffffff;
+    --text-color: #000000;
+    --screen-text: #000000;
+
+    --btn-num-bg: #f0f0f0;          /* ปุ่มตัวเลขสีขาวเทาๆ */
+    --btn-num-text: #000000;
+
+    --btn-func-bg: #d4d4d2;
+    --btn-func-text: #000000;
+
+    --btn-op-bg: #ff9f0a;           /* สีส้มคงเดิม (เป็นเอกลักษณ์) */
+    --btn-op-text: #ffffff;
+
+    --history-bg: rgba(255, 255, 255, 0.95);
+}
+
+/* --- 2. การจัดหน้าและตัวเครื่อง --- */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--bg-body); /* ใช้ตัวแปร */
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    transition: background-color 0.3s;
+}
+
+.calculator {
+    position: relative;
+    background-color: var(--bg-calc); /* ใช้ตัวแปร */
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 320px;
+    overflow: hidden;
+    transition: background-color 0.3s;
+}
+
+/* --- 3. Header & Icons --- */
+.header {
+    display: flex;
+    justify-content: space-between; /* ชิดซ้ายขวา */
+    margin-bottom: 10px;
+    padding: 0 5px;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--text-color); /* ใช้ตัวแปร */
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-icon:hover { transform: scale(1.1); }
+
+/* --- 4. History View --- */
+.history-view {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 85%;
+    background-color: var(--history-bg); /* ใช้ตัวแปร */
+    color: var(--text-color);            /* ใช้ตัวแปร */
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 10;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+}
+
+.history-view.hidden { transform: translateY(110%); }
+
+.history-view ul { list-style: none; padding: 0; text-align: right; }
+.history-view li { border-bottom: 1px solid #ccc; padding: 10px 0; font-size: 1.1rem; opacity: 0.8; }
+
+.btn-clear-history {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* --- 5. Screen & Buttons --- */
+/* แก้ไข .display ให้เรียงของข้างในเป็นแนวตั้ง */
+.display {
+    display: flex;
+    flex-direction: column;   /* เรียงลงมา */
+    justify-content: flex-end; /* ให้ไปกองอยู่ด้านล่าง */
+    background-color: transparent;
+    margin-bottom: 20px;
+}
+
+/* เพิ่ม Style สำหรับตัว Preview */
+.preview {
+    width: 100%;
+    height: 30px;            /* ความสูงคงที่ */
+    min-height: 30px;
+    text-align: right;       /* ชิดขวา */
+    font-size: 1.5rem;       /* ตัวเล็กกว่าจอหลัก */
+    color: var(--screen-text); /* สีเดียวกับจอหลัก */
+    opacity: 0.5;            /* แต่จางลง 50% */
+    padding-right: 10px;
+    box-sizing: border-box;
+    overflow: hidden;        /* กันข้อความล้น */
+}
+
+
+.display input {
+    width: 100%;
+    height: 60px;            /* ลดความสูงลงนิดหน่อย */
+    background-color: transparent;
+    border: none;
+    color: var(--screen-text);
+    font-size: 3rem;
+    text-align: right;
+    padding-right: 10px;
+    box-sizing: border-box;
+    margin-bottom: 0;        /* ลบ margin ออก */
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.btn {
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.btn:active { filter: brightness(0.8); }
+
+/* ปุ่มตัวเลข */
+.btn.number {
+    background-color: var(--btn-num-bg);
+    color: var(--btn-num-text);
+}
+
+/* ปุ่มฟังก์ชัน (AC, DEL) */
+.btn.func {
+    background-color: var(--btn-func-bg);
+    color: var(--btn-func-text);
+}
+
+/* ปุ่มเครื่องหมาย */
+.btn.operator {
+    background-color: var(--btn-op-bg);
+    color: var(--btn-op-text);
+}
+
+/* ปุ่มเท่ากับ */
+.btn.equal {
+    background-color: #ff4500; /* สีแดงส้มคงเดิม */
+    color: white;
+}
